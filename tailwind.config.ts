@@ -13,8 +13,18 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      fontFamily: {
+        kanit: ['Kanit', 'sans-serif'],
+      },
+      fontSize: {
+        'custom-48': '48px',
+      },
+      lineHeight: {
+        'custom-120': '120px',
+      },
     },
   },
   plugins: [],
+  darkMode: 'class', // Enable dark mode using class names
 };
 export default config;
