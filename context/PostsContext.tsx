@@ -5,7 +5,7 @@ import { useAuth } from './AuthContext';
 
 interface Post {
   id: number;
-  image: string;
+
   title: string;
   body: string;
   tags: string[];
@@ -45,7 +45,6 @@ export const PostsProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         console.log(response.data.posts);
         setPosts(response.data.posts.map((post: any) => ({
           id: post.id,
-          image: post.image,
           title: post.title,
           body: post.body,
           tags: post.tags,

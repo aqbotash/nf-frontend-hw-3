@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import axios from 'axios';
 import { usePosts } from '@/context/PostsContext';
 import { Post } from '@/types';
+import { FaEye } from 'react-icons/fa';
 
 const PostPage: React.FC = () => {
   const router = useRouter();
@@ -33,17 +34,20 @@ const PostPage: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto py-8 dark:text-white">
+    <div className="container py-8 px-8 md:px-40 dark:text-white">
       <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
       <div className="text-gray-600 dark:text-gray-100">{post.body}</div>
       <div className="flex justify-between items-center mt-4">
-        <div className="text-sm text-gray-500 dark:text-gray-200">{post.views} min read</div>
+        <div className="text-sm text-gray-500 dark:text-gray-200 flex flex-row gap-2">
+          <div className="flex items-center justify-center"><FaEye/></div>
+          <div>{post.views}</div>
+        </div>
       </div>
       <div className="mt-4">
         <h2 className="text-xl font-bold mb-2">Tags:</h2>
-        <ul className="flex flex-wrap">
+        <ul className="flex flex-wrap gap-2">
           {post.tags.map(tag => (
-            <li key={tag} className="bg-gray-200 text-gray-800 px-2 py-1 rounded mr-2 mb-2">{tag}</li>
+            <li key={tag} className="bg-gray-200 text-gray-800 px-2 py-1 rounded">{tag}</li>
           ))}
         </ul>
       </div>
@@ -52,9 +56,8 @@ const PostPage: React.FC = () => {
         <div>Likes: {post.reactions.likes}</div>
         <div>Dislikes: {post.reactions.dislikes}</div>
       </div>
-      <div className="mt-4">
-        <h2 className="text-xl font-bold mb-2">User Name:</h2>
-        <div>{userName}</div>
+      <div className="mt-4 font-bold">
+        <div>Author: @{userName}</div>
       </div>
     </div>
   );

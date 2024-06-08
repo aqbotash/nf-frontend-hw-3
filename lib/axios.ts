@@ -28,12 +28,12 @@ instance.interceptors.response.use(
       } else if (error.response.status === 500) {
         alert('Internal Server Error. Please try again later.');
       } else {
-        alert('An error occurred. Please try again.');
+        console.log('An error occurred. Please try again.');
       }
     } else if (error.request) {
       alert('Network error. Please check your internet connection.');
     } else {
-      alert('An error occurred. Please try again.');
+      console.log('An error occurred. Please try again.');
     }
 
     return Promise.reject(error);

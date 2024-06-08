@@ -22,7 +22,7 @@ const LoginPage: React.FC = () => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none"
+            className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none dark:text-white"
           />
         </div>
         <div className="mb-4">
@@ -31,7 +31,7 @@ const LoginPage: React.FC = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none"
+            className="mt-1 block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none dark:text-white"
           />
         </div>
         <button

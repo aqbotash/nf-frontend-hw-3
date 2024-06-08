@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import { PostsProvider } from "@/context/PostsContext";
 import { AuthProvider } from '../context/AuthContext';
 import  ThemeProvider from "@/context/ThemeContext";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,18 +20,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} bg-white dark:bg-gray-800`}>
+    <html lang="en" suppressHydrationWarning={true}>
+      <body className={`${inter.className} bg-white dark:bg-gray-800`} >
       <AuthProvider>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem >  
-        <PostsProvider>
-          <Header/>
-          {children}
+        <ThemeProvider attribute="class" >  
+          <PostsProvider>
+            <Header/>
+            {children}
+            <Footer/>
           </PostsProvider>
-          </ThemeProvider>
-          </AuthProvider>
+        </ThemeProvider>
+      </AuthProvider>
           </body>
-        
     </html>
   );
 }
