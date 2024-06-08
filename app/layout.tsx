@@ -6,6 +6,7 @@ import { PostsProvider } from "@/context/PostsContext";
 import { AuthProvider } from '../context/AuthContext';
 import  ThemeProvider from "@/context/ThemeContext";
 import Footer from "@/components/Footer";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
             <Header/>
             {children}
             <Footer/>
+
           </PostsProvider>
         </ThemeProvider>
       </AuthProvider>

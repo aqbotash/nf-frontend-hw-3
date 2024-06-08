@@ -3,6 +3,8 @@ import { usePosts } from '../context/PostsContext';
 import Link from 'next/link';
 import { FaThumbsUp, FaThumbsDown } from 'react-icons/fa';
 import { Post } from '@/types';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PostsList: React.FC = () => {
   const { posts, deletePost, updatePost, addPost } = usePosts();
@@ -40,6 +42,7 @@ const PostsList: React.FC = () => {
         body: '',
         tags: [],
       });
+      toast.success('Post added successfully!');
     }
   };
 
@@ -114,6 +117,7 @@ const PostsList: React.FC = () => {
         body: '',
         tags: [],
       });
+      toast.success('Post updated successfully!');
     }
   };
 
@@ -124,6 +128,11 @@ const PostsList: React.FC = () => {
       body: '',
       tags: [],
     });
+  };
+
+  const handleDeletePost = (postId: number) => {
+    deletePost(postId);
+    toast.success('Post deleted successfully!');
   };
 
   return (
@@ -211,7 +220,7 @@ const PostsList: React.FC = () => {
               </div>
               <div className="flex gap-2">
                 <button
-                  onClick={() => deletePost(post.id)}
+                  onClick={() => handleDeletePost(post.id)}
                   className="text-red-500 hover:text-red-700 dark:text-red-500"
                 >
                   Delete
@@ -263,8 +272,48 @@ const PostsList: React.FC = () => {
           </li>
         ))}
       </ul>
+      {editPostId !== null && (
+        <div className="mt-4 p-4 border border-gray-300 rounded bg-gray-100 dark:bg-gray-700">
+          <h2 className="text-lg font-bold">Edit Post</h2>
+          <div className="flex flex-col md:flex-row gap-4">
+            <input
+              type="text"
+              value={editPost.title}
+              onChange={(e) => setEditPost({ ...editPost, title: e.target.value })}
+              placeholder="Title"
+              className="flex-1 border border-gray-300 rounded px-3 py-1 dark:bg-white dark:text-black"
+            />
+            <textarea
+              value={editPost.body}
+              onChange={(e) => setEditPost({ ...editPost, body: e.target.value })}
+              placeholder="Body"
+              className="flex-1 border border-gray-300 rounded px-3 py-1 dark:bg-white dark:text-black"
+            />
+            <input
+              type="text"
+              value={editPost.tags?.join(', ') || ''}
+              onChange={(e) => setEditPost({ ...editPost, tags: e.target.value.split(',').map((tag) => tag.trim()) })}
+              placeholder="Tags (comma separated)"
+              className="flex-1 border border-gray-300 rounded px-3 py-1 dark:bg-white dark:text-black"
+            />
+            <button
+              onClick={handleUpdatePost}
+              className="bg-gray-800 hover:bg-gray-700 dark:hover:bg-gray-300 dark:bg-white dark:text-black text-white font-bold py-2 px-4 rounded"
+            >
+              Update Post
+            </button>
+            <button
+              onClick={handleCancelEdit}
+              className="bg-gray-800 hover:bg-gray-700 dark:hover:bg-gray-300 dark:bg-white dark:text-black text-white font-bold py-2 px-4 rounded"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+      <ToastContainer />
     </div>
   );
 };
 
-export default PostsList; 
+export default PostsList;

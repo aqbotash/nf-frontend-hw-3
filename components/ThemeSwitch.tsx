@@ -32,7 +32,7 @@ const ThemeSwitch = () => {
           {isActive ? (
             <BiSun size={16} className="text-white text-lg md:text-xl" />
           ) : (
-            <BiMoon size={16} className="text-black dark:text-white text-lg md:text-xl" />
+            <BiMoon size={16} className="text-black text-lg md:text-xl" />
           )}
         </button>
       )}
