@@ -1,11 +1,12 @@
 'use client'
 import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation';
 import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
 
 interface AuthContextProps {
   authToken: string | null;
+  username: string | null;
   refreshToken: () => Promise<void>;
   login: (username: string, password: string) => Promise<void>;
 }
@@ -26,10 +27,12 @@ interface AuthProviderProps {
 
 interface DecodedToken {
   exp: number;
+  username: string;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [authToken, setAuthToken] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -37,8 +40,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const token = localStorage.getItem('authToken');
     if (token) {
       setAuthToken(token);
-      // Check if token is expired and refresh if needed
-      const decodedToken:DecodedToken = jwtDecode<DecodedToken>(token);
+      const decodedToken: DecodedToken = jwtDecode<DecodedToken>(token);
+      setUsername(decodedToken.username);
       const currentTime = Date.now() / 1000;
       if (decodedToken.exp < currentTime) {
         refreshToken();
@@ -46,7 +49,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } else if (pathname !== '/login') {
       router.push('/login');
     }
-  }, [router]);
+  }, [router, pathname]);
 
   const login = async (username: string, password: string) => {
     try {
@@ -57,6 +60,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       );
       const { token } = res.data;
       setAuthToken(token);
+      const decodedToken: DecodedToken = jwtDecode<DecodedToken>(token);
+      setUsername(decodedToken.username);
+      console.log('Login successful:', decodedToken.username);
       localStorage.setItem('authToken', token);
       router.push('/posts');
     } catch (error) {
@@ -65,7 +71,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const refreshToken = async () => {
-    // Implement your logic to refresh the token
     try {
       const res = await axios.post(
         'https://dummyjson.com/auth/refresh',
@@ -74,18 +79,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       );
       const { token } = res.data;
       setAuthToken(token);
+      const decodedToken: DecodedToken = jwtDecode<DecodedToken>(token);
+      setUsername(decodedToken.username);
       localStorage.setItem('authToken', token);
     } catch (error) {
       console.error('Failed to refresh token:', error);
-      // Handle case where refresh token is expired or not refreshable anymore
       setAuthToken(null);
+      setUsername(null);
       localStorage.removeItem('authToken');
       router.push('/login');
     }
   };
 
   return (
-    <AuthContext.Provider value={{ authToken, login, refreshToken }}>
+    <AuthContext.Provider value={{ authToken, username, login, refreshToken }}>
       {children}
     </AuthContext.Provider>
   );
